@@ -1,8 +1,8 @@
 export interface Env {
-  heliusApiKey: string | undefined;
-  protocolProgramIdPubkey: string | undefined;
-  nonceAuthorityAccountSecretKey: string | undefined;
-  nonceAuthorityAccountPubkey: string | undefined;
-  nonceAccountPubkey: string | undefined;
-  nonceAccountSecretKey: string | undefined;
+  heliusApiKey: string;
+  protocolProgramIdPubkey: string;
+  nonceAuthorityAccountSecretKey: string;
+  nonceAuthorityAccountPubkey: string;
+  nonceAccountPubkey: string;
+  nonceAccountSecretKey: string;
 }

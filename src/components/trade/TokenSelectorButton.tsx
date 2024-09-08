@@ -13,21 +13,23 @@ export default function TokenSelectorButton({
   return (
     <button
       onClick={onClick}
-      className="flex justify-center items-center text-center font-medium rounded-xl bg-white hover:bg-cyan hover:text-black transition-all px-3 py-1 shadow select-none text-purple min-h-11 min-w-32"
+      className="flex items-center text-center font-medium rounded-xl bg-white hover:bg-gray-100 hover:text-black transition-all px-3 py-2 shadow-md select-none text-black min-h-11 min-w-32"
+      aria-label={token ? `Selected token: ${token.symbol}` : "Select a token"}
     >
       {!token ? (
-        "Select a token"
+        <span>Select a token</span>
       ) : (
         <>
           <Image
-            className="rounded-full mr-3 max-w-auto"
+            className="rounded-full mr-3"
             width={30}
             height={30}
-            src={token.logoURI}
-            alt=""
+            src={token.logoURI || "/assets/default-token.png"} // Default image in case of missing logoURI
+            alt={`Logo of ${token.symbol}`}
+            // Optionally add a fallback or error handling for broken images
           />
           <span className="font-semibold">{token.symbol}</span>
-          <span className="material-symbols-rounded ml-1 -mr-1">
+          <span className="material-symbols-rounded ml-1">
             keyboard_arrow_down
           </span>
         </>

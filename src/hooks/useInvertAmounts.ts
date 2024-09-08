@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 import { useSwap } from "@/components/trade/swap/SwapProvider";
 
+/**
+ * Custom hook to swap the sell and buy amounts and their respective tokens.
+ * @returns A function to perform the inversion.
+ */
 export function useInvertAmounts() {
   const {
     sellAmount,
@@ -13,20 +17,26 @@ export function useInvertAmounts() {
     setBuySelectedToken,
   } = useSwap();
 
+  /**
+   * Swaps the sell and buy amounts and tokens.
+   */
   const invertAmounts = useCallback(() => {
-    setSellAmount(buyAmount);
-    setBuyAmount(sellAmount);
-    setSellSelectedToken(buySelectedToken);
-    setBuySelectedToken(sellSelectedToken);
+    // Swap sell and buy amounts
+    setSellAmount(buyAmount ?? 0);
+    setBuyAmount(sellAmount ?? 0);
+
+    // Swap selected tokens
+    setSellSelectedToken(buySelectedToken ?? null);
+    setBuySelectedToken(sellSelectedToken ?? null);
   }, [
-    setBuyAmount,
-    setBuySelectedToken,
-    setSellAmount,
-    setSellSelectedToken,
-    sellAmount,
     buyAmount,
-    sellSelectedToken,
+    sellAmount,
     buySelectedToken,
+    sellSelectedToken,
+    setSellAmount,
+    setBuyAmount,
+    setSellSelectedToken,
+    setBuySelectedToken,
   ]);
 
   return invertAmounts;

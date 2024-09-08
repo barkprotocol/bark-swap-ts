@@ -35,46 +35,26 @@ interface SwapContextProps {
   resetAll: () => void;
 }
 
-const initialValue = {
+const initialValue: SwapContextProps = {
   sellAmount: "",
-  setSellAmount: () => {
-    return;
-  },
+  setSellAmount: () => {},
   buyAmount: "",
-  setBuyAmount: () => {
-    return;
-  },
+  setBuyAmount: () => {},
   sellSelectedToken: null,
-  setSellSelectedToken: () => {
-    return;
-  },
+  setSellSelectedToken: () => {},
   buySelectedToken: null,
-  setBuySelectedToken: () => {
-    return;
-  },
+  setBuySelectedToken: () => {},
   minReceived: "",
-  setMinReceived: () => {
-    return;
-  },
+  setMinReceived: () => {},
   expireTime: null,
-  setExpireTime: () => {
-    return;
-  },
-  orderStatus: "INCOMPLETE" as OrderStatus,
-  setOrderStatus: () => {
-    return;
-  },
+  setExpireTime: () => {},
+  orderStatus: "INCOMPLETE",
+  setOrderStatus: () => {},
   solscanUrl: "",
-  setSolscanUrl: () => {
-    return;
-  },
+  setSolscanUrl: () => {},
   errorMessage: "",
-  setErrorMessage: () => {
-    return;
-  },
-  resetAll: () => {
-    return;
-  },
+  setErrorMessage: () => {},
+  resetAll: () => {},
 };
 
 const SwapContext = createContext<SwapContextProps>(initialValue);
@@ -85,7 +65,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
   const [sellAmount, setSellAmount] = useState<string | number>("");
   const [buyAmount, setBuyAmount] = useState<string | number>("");
   const [sellSelectedToken, setSellSelectedToken] = useState<Token | null>(
-    tokenList[0] as Token,
+    tokenList[0] || null
   );
   const [buySelectedToken, setBuySelectedToken] = useState<Token | null>(null);
   const [minReceived, setMinReceived] = useState<string | number>("");
@@ -106,33 +86,31 @@ export function SwapProvider({ children }: PropsWithChildren) {
     setErrorMessage("");
   }, []);
 
-  const value = useMemo(() => {
-    return {
-      sellAmount,
-      setSellAmount,
-      buyAmount,
-      setBuyAmount,
-      sellSelectedToken,
-      setSellSelectedToken,
-      buySelectedToken,
-      setBuySelectedToken,
-      minReceived,
-      setMinReceived,
-      expireTime,
-      setExpireTime,
-      orderStatus,
-      setOrderStatus,
-      solscanUrl,
-      setSolscanUrl,
-      errorMessage,
-      setErrorMessage,
-      resetAll,
-    };
-  }, [
-    buyAmount,
-    buySelectedToken,
+  const value = useMemo(() => ({
     sellAmount,
+    setSellAmount,
+    buyAmount,
+    setBuyAmount,
     sellSelectedToken,
+    setSellSelectedToken,
+    buySelectedToken,
+    setBuySelectedToken,
+    minReceived,
+    setMinReceived,
+    expireTime,
+    setExpireTime,
+    orderStatus,
+    setOrderStatus,
+    solscanUrl,
+    setSolscanUrl,
+    errorMessage,
+    setErrorMessage,
+    resetAll,
+  }), [
+    sellAmount,
+    buyAmount,
+    sellSelectedToken,
+    buySelectedToken,
     minReceived,
     expireTime,
     orderStatus,
@@ -147,7 +125,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
 export const useSwap = () => {
   const context = useContext(SwapContext);
 
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useSwap must be used within a SwapProvider");
   }
 

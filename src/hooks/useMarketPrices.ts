@@ -1,6 +1,5 @@
 import { TokenWithPriceFeed, tokenPriceFeedIds } from "@/lib/tokenPriceFeedIds";
 import { useCallback, useEffect, useState } from "react";
-
 import { PriceServiceConnection } from "@pythnetwork/price-service-client";
 import { compact } from "lodash-es";
 
@@ -11,7 +10,7 @@ interface MarketPrices {
   isLoading: boolean;
 }
 
-const initialState = {
+const initialState: MarketPrices = {
   sellingTokenToUSD: null,
   buyingTokenToUSD: null,
   sellingTokenToBuyingToken: null,
@@ -26,29 +25,30 @@ export default function useMarketPrices(
   const [marketPrices, setMarketPrices] = useState<MarketPrices>(initialState);
 
   const getMarketPrices = useCallback(async () => {
-    if (!sellingToken) return;
+    if (!sellingToken && !buyingToken) return;
 
-    setMarketPrices({ ...initialState, isLoading: true });
+    setMarketPrices((prev) => ({ ...prev, isLoading: true }));
 
-    const connection = new PriceServiceConnection(
-      "https://hermes.pyth.network",
-    );
+    const connection = new PriceServiceConnection("https://hermes.pyth.network");
 
-    const feedIds = compact([sellingToken, buyingToken]).map(
-      (pair) => tokenPriceFeedIds[pair],
-    );
+    // Ensure feedIds are valid
+    const feedIds = compact([sellingToken, buyingToken]).map(token => tokenPriceFeedIds[token]);
+
+    // Handle missing feedIds
+    if (feedIds.length === 0) {
+      setMarketPrices((prev) => ({ ...prev, isLoading: false }));
+      return;
+    }
 
     try {
       const latestPrices = await connection.getLatestPriceFeeds(feedIds);
+
       if (!latestPrices) {
         setMarketPrices((prev) => ({ ...prev, isLoading: false }));
         return;
       }
 
-      const displayPrices = latestPrices.map((price) => {
-        const currentPrice = price.getPriceUnchecked();
-        return currentPrice.getPriceAsNumberUnchecked();
-      });
+      const displayPrices = latestPrices.map(price => price.getPriceUnchecked().getPriceAsNumberUnchecked());
 
       if (displayPrices.length === 1) {
         setMarketPrices({
@@ -57,17 +57,17 @@ export default function useMarketPrices(
           sellingTokenToBuyingToken: null,
           isLoading: false,
         });
-        return;
+      } else if (displayPrices.length === 2) {
+        const [sellingPrice, buyingPrice] = displayPrices;
+        setMarketPrices({
+          sellingTokenToUSD: sellingPrice,
+          buyingTokenToUSD: buyingPrice,
+          sellingTokenToBuyingToken: sellingPrice / buyingPrice,
+          isLoading: false,
+        });
+      } else {
+        setMarketPrices((prev) => ({ ...prev, isLoading: false }));
       }
-
-      const conversionPrice = displayPrices[0] / displayPrices[1];
-
-      setMarketPrices({
-        sellingTokenToUSD: displayPrices[0],
-        buyingTokenToUSD: displayPrices[1],
-        sellingTokenToBuyingToken: conversionPrice,
-        isLoading: false,
-      });
     } catch (error) {
       console.error("Error fetching market prices", error);
       setMarketPrices((prev) => ({ ...prev, isLoading: false }));
@@ -77,9 +77,7 @@ export default function useMarketPrices(
   useEffect(() => {
     getMarketPrices();
 
-    const interval = setInterval(() => {
-      getMarketPrices();
-    }, fetchInterval);
+    const interval = setInterval(getMarketPrices, fetchInterval);
 
     return () => clearInterval(interval);
   }, [getMarketPrices, fetchInterval]);

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  children?: React.ReactNode;
+  children?: React.ReactNode; // Optional children prop to allow for nested elements
 }
 
 const Container = ({ children }: Props) => {

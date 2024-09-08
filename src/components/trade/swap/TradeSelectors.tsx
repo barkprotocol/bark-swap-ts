@@ -28,28 +28,24 @@ export default function TradeSelectors({
   const invertAmounts = useInvertAmounts();
 
   return (
-    <>
-      <div className="my-4">
-        <TokenSelector
-          label="Sell Amount"
-          inputValue={sellAmount}
-          setInputValue={setSellAmount}
-          setSelectedToken={setSellSelectedToken}
-          selectedToken={sellSelectedToken}
-          tokenToUSDPrice={sellingTokenToUSD}
-        />
-      </div>
+    <div className="w-full flex flex-col space-y-4">
+      <TokenSelector
+        label="Sell Amount"
+        inputValue={sellAmount}
+        setInputValue={setSellAmount}
+        setSelectedToken={setSellSelectedToken}
+        selectedToken={sellSelectedToken}
+        tokenToUSDPrice={sellingTokenToUSD}
+      />
       <InverterButton onInvert={invertAmounts} isLoading={isLoading} />
-      <div className="my-4">
-        <TokenSelector
-          label="Buy Amount"
-          inputValue={buyAmount}
-          setInputValue={setBuyAmount}
-          setSelectedToken={setBuySelectedToken}
-          selectedToken={buySelectedToken}
-          tokenToUSDPrice={buyingTokenToUSD}
-        />
-      </div>
-    </>
+      <TokenSelector
+        label="Buy Amount"
+        inputValue={buyAmount}
+        setInputValue={setBuyAmount}
+        setSelectedToken={setBuySelectedToken}
+        selectedToken={buySelectedToken}
+        tokenToUSDPrice={buyingTokenToUSD}
+      />
+    </div>
   );
 }

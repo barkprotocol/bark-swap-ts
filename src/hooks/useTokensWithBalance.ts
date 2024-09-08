@@ -5,7 +5,7 @@ import { useTokensBalances } from "./useTokensBalances";
 
 export function useTokensWithBalance() {
   const tokenList = useTokenList();
-  const balances = useTokensBalances();
+  const { balanceData: balances } = useTokensBalances(); // Destructure balanceData to handle the state correctly
   const solBalance = useSolBalance();
 
   const tokensWithBalance = useMemo(
@@ -18,7 +18,10 @@ export function useTokensWithBalance() {
             (b) => b.mint.toString() === token.address,
           );
 
-          return { ...token, balance: balance?.tokenAmount?.uiAmount };
+          return {
+            ...token,
+            balance: balance?.tokenAmount?.uiAmount ?? 0, // Default to 0 if no balance is found
+          };
         }
       }),
     [balances, solBalance, tokenList],

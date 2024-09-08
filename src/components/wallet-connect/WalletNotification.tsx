@@ -20,7 +20,13 @@ const WalletNotification: IUnifiedWalletConfig["notificationCallback"] = {
     });
   },
   onConnecting: () => {
-    return;
+    notifications.show({
+      title: "Connecting Wallet",
+      message: "Please wait while we connect your wallet...",
+      color: "blue",
+      icon: <span className="material-symbols-rounded">sync</span>,
+      classNames,
+    });
   },
   onDisconnect: (props: IWalletNotification) => {
     notifications.show({
@@ -36,11 +42,11 @@ const WalletNotification: IUnifiedWalletConfig["notificationCallback"] = {
       title: `${props.walletName} Wallet is not installed`,
       message: (
         <span>
-          {`Please go to the provider`}{" "}
+          {`Please go to the provider's`}{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"
-            tw="underline font-bold"
+            className="underline font-bold"
             href={props.metadata.url}
           >
             {`website`}

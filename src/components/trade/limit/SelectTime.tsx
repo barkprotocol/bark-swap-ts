@@ -22,21 +22,21 @@ export default function SelectTime({
   expireTime,
 }: SelectTimeProps) {
   return (
-    <div className="rounded-2xl border-2 border-cream-light hover:border-cyan bg-cream-light selection:text-purple-medium selection:bg-purple-medium-dark">
+    <div className="rounded-2xl border-2 border-light-gray hover:border-dark-gray bg-light-gray selection:text-dark-gray selection:bg-light-gray">
       <Select
         aria-label={label}
         label={label}
-        value={expireTime}
+        value={expireTime ?? ""}
         variant="unstyled"
         size="md"
         data={options}
-        onChange={setExpireTime}
+        onChange={(value) => setExpireTime(value ?? null)}
         classNames={{
-          option: "hover:bg-cream hover:text-black",
-          dropdown: "rounded-2xl border-2 border-cream-light",
-          label: "ml-4 mt-3 text-sm font-bold text-purple",
+          option: "hover:bg-light-gray hover:text-black",
+          dropdown: "rounded-2xl border-2 border-light-gray",
+          label: "ml-4 mt-3 text-sm font-bold text-dark-gray",
           input:
-            "text-right text-purple -mt-8 rounded-2xl text-xl border-0 focus:ring-0 focus:border-0 bg-transparent",
+            "text-right text-dark-gray -mt-8 rounded-2xl text-xl border-0 focus:ring-0 focus:border-0 bg-transparent",
         }}
       />
     </div>

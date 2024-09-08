@@ -9,7 +9,7 @@ import { dm_sans, red_hat_display } from "./fonts/config";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
 
-import AppWalletProvider from "@/components/wallet-connect/AppWalletProvider";
+import AppWalletProvider from "@/components/wallet-connect/WalletProvider";
 import { ColorSchemeScript } from "@mantine/core";
 import MantineThemeProvider from "@/components/theme/MantineThemeProvider";
 import { Notifications } from "@mantine/notifications";

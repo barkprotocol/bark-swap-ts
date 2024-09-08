@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  CSSVariablesResolver,
-  MantineProvider,
-  createTheme,
-} from "@mantine/core";
-
+import { MantineProvider, createTheme } from "@mantine/core";
 import React from "react";
 
 const theme = createTheme({
@@ -20,18 +15,19 @@ const theme = createTheme({
   },
 });
 
-const resolver: CSSVariablesResolver = (theme) => ({
+const resolver = (theme: typeof theme) => ({
   variables: {},
   dark: {},
   light: {
     "--mantine-color-body": theme.other.backgroundGradient,
   },
 });
+
 export default function MantineThemeProvider({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <MantineProvider theme={theme} cssVariablesResolver={resolver}>
       {children}

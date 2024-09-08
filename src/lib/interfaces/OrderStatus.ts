@@ -1,1 +1,1 @@
-export type OrderStatus = "INCOMPLETE" | "PENDING" | "SUBMITED" | "ERROR";
+export type OrderStatus = "INCOMPLETE" | "PENDING" | "SUBMITTED" | "ERROR";

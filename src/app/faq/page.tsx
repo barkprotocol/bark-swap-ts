@@ -13,7 +13,7 @@ export default function FAQ() {
       <main className="flex-1 px-4 py-8 md:px-8 md:py-12">
         <h2
           className={`${architype_bayer.className} text-center text-2xl md:text-4xl font-bold mb-6`}
-          aria-label="FAQ Heading"
+          aria-label="Frequently Asked Questions Heading"
         >
           Frequently Asked Questions
         </h2>

@@ -32,10 +32,10 @@ export default function AppWalletProvider({
           autoConnect: false,
           env: network,
           metadata: {
-            name: "Urani Swap",
-            description: "Urani Swap",
-            url: "https://urani.trade",
-            iconUrls: ["https://urani.trade/favicon.ico"],
+            name: "BarkSwap",
+            description: "BarkSwap",
+            url: "https://trade.barkprotocol.app",
+            iconUrls: ["https://barkprotocol.app/favicon.ico"],
           },
           walletlistExplanation: {
             href: "https://station.jup.ag/docs/additional-topics/wallet-list",

@@ -13,11 +13,12 @@ import { useUnifiedWallet } from "@jup-ag/wallet-adapter";
 // Type definitions
 interface Order {
   id: string;
-  // Define other properties of an order here
+  // Add other properties of an order here
 }
 
 const PER_PAGE = 10;
 
+// Function to chunk array into smaller arrays
 function chunk<T>(array: T[], size: number): T[][] {
   if (!array.length) return [];
   const head = array.slice(0, size);
@@ -29,6 +30,7 @@ export default function ListOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [activePage, setPage] = useState<number>(1);
+  const [error, setError] = useState<string | null>(null);
 
   const { publicKey, connected } = useUnifiedWallet();
 
@@ -37,6 +39,7 @@ export default function ListOrders() {
 
     const fetchData = async () => {
       setLoading(true);
+      setError(null); // Reset error state before fetching
       try {
         const { data } = await axios.get<Order[]>(
           `/orders?srcAddress=${publicKey.toString()}`
@@ -44,7 +47,7 @@ export default function ListOrders() {
         setOrders(data);
       } catch (error) {
         console.error("Error fetching orders", error);
-        // Display a user-friendly error message here if needed
+        setError("There was an error fetching your orders. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -60,6 +63,10 @@ export default function ListOrders() {
       {isLoading ? (
         <div className="text-center mt-12">
           <p>Loading orders...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center mt-12">
+          <p className="text-red-500">{error}</p>
         </div>
       ) : !orders.length ? (
         <div className="text-center mt-12">

@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useState } from "react";
-
 import LimitForm from "../trade/limit/LimitForm";
 import SwapTradeForm from "../trade/swap/SwapTradeForm";
 import TransactionMessage from "../utils/TransactionMessage";
@@ -12,17 +11,17 @@ import { useSwap } from "../trade/swap/SwapProvider";
 export default function SwapWidget() {
   const [typeSelected, setTypeSelected] = useState<"market" | "limit">("limit");
 
-  const { orderStatus, setOrderStatus, errorMessage, solscanUrl, resetAll } =
-    useSwap();
+  const { orderStatus, setOrderStatus, errorMessage, solscanUrl, resetAll } = useSwap();
 
   return (
     <div className="sm:w-[600px] min-h-[400px] mx-0 md:mx-auto my-0 mb-4 px-4 md:px-6 py-8 bg-white rounded-lg shadow-lg dark:bg-zinc-800 grow sm:grow-0">
-      <div className="w-full flex flex-col items-center justify-center text-purple">
+      <div className="w-full flex flex-col items-center justify-center text-gray-800 dark:text-gray-300">
         <WidgetTitle />
         {orderStatus === "INCOMPLETE" && (
           <WidgetTabs
             selectedTab={typeSelected}
             setSelectedTab={setTypeSelected}
+            activeTabColor="text-sand-500" // Adjusted color for active tab
           />
         )}
 
@@ -33,7 +32,7 @@ export default function SwapWidget() {
           </Fragment>
         )}
 
-        {orderStatus === "SUBMITED" && (
+        {orderStatus === "SUBMITTED" && (
           <TransactionMessage
             type="success"
             icon="task_alt"
@@ -41,9 +40,9 @@ export default function SwapWidget() {
             solscanUrl={solscanUrl}
             buttonText="See your limit orders"
             linkTo="/list-orders"
-            buttonAction={() => {
-              setOrderStatus("INCOMPLETE");
-            }}
+            buttonAction={() => setOrderStatus("INCOMPLETE")}
+            buttonClassName="bg-sand-500 hover:bg-sand-600 text-white"
+            aria-live="polite"
           />
         )}
 
@@ -57,6 +56,8 @@ export default function SwapWidget() {
               resetAll();
               setOrderStatus("INCOMPLETE");
             }}
+            buttonClassName="bg-red-500 hover:bg-red-600 text-white"
+            aria-live="assertive"
           />
         )}
       </div>

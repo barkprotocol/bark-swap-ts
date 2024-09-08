@@ -5,7 +5,6 @@ import { Token } from "@/lib/interfaces/tokensList";
 
 interface QuoteOrder {
   outAmount: string | null;
-
   inAmount?: string;
   inputMint?: string;
   contextSlot?: number;
@@ -26,7 +25,7 @@ interface Response {
   error?: string;
 }
 
-const initialState = {
+const initialState: Response = {
   outputAmount: null,
   isLoading: false,
 };
@@ -39,47 +38,62 @@ export default function useJupiterQuotes(
   currentAmount?: number,
 ) {
   const [quoteResponse, setQuoteResponse] = useState<Response>(initialState);
-  const [outputAmount, setOutputAmount] = useState<number | null>(null);
 
   const getQuote = useCallback(async () => {
-    if (!sellingToken || !buyingToken || !currentAmount) return;
-
-    if (isNaN(currentAmount) || currentAmount <= 0) {
+    if (!sellingToken || !buyingToken || !currentAmount || isNaN(currentAmount) || currentAmount <= 0) {
       return;
     }
 
     setQuoteResponse({ ...initialState, isLoading: true });
 
-    const url = `https://quote-api.jup.ag/v6/quote?inputMint=${sellingToken?.address}&outputMint=${buyingToken?.address}&amount=${currentAmount * Math.pow(10, sellingToken?.decimals)}&slippage=0.5`;
+    const params = new URLSearchParams({
+      inputMint: sellingToken.address,
+      outputMint: buyingToken.address,
+      amount: (currentAmount * Math.pow(10, sellingToken.decimals)).toString(),
+      slippage: "0.5", // Consider making slippage configurable
+    });
 
-    const quote = await (await fetch(url)).json();
+    try {
+      const response = await fetch(`https://quote-api.jup.ag/v6/quote?${params}`);
+      const quote = await response.json();
 
-    if (quote.error) {
+      if (quote.error) {
+        setOrderStatus("ERROR");
+        setErrorMessage(
+          quote.errorCode === "TOKEN_NOT_TRADABLE"
+            ? "This token is not tradable."
+            : quote.error,
+        );
+        setQuoteResponse({
+          ...initialState,
+          isLoading: false,
+        });
+        return;
+      }
+
+      if (quote.outAmount) {
+        const outAmountNumber = Number(quote.outAmount) / Math.pow(10, buyingToken.decimals);
+        setQuoteResponse({
+          quote,
+          outputAmount: outAmountNumber,
+          isLoading: false,
+        });
+      } else {
+        setQuoteResponse({
+          ...initialState,
+          isLoading: false,
+          error: "No output amount received.",
+        });
+      }
+    } catch (error) {
       setOrderStatus("ERROR");
-      setErrorMessage(
-        quote.errorCode === "TOKEN_NOT_TRADABLE"
-          ? "This token is not tradable."
-          : quote.error,
-      );
-      return setQuoteResponse({
-        ...quoteResponse,
+      setErrorMessage("Failed to fetch quote.");
+      setQuoteResponse({
+        ...initialState,
         isLoading: false,
       });
     }
-    if (quote && quote.outAmount) {
-      const outAmountNumber =
-        Number(quote.outAmount) / Math.pow(10, buyingToken.decimals);
-      setOutputAmount(outAmountNumber);
-    }
-
-    setQuoteResponse({
-      ...quoteResponse,
-      quote,
-      outputAmount,
-      isLoading: false,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buyingToken, sellingToken, currentAmount, outputAmount]);
+  }, [buyingToken, sellingToken, currentAmount, setErrorMessage, setOrderStatus]);
 
   useEffect(() => {
     getQuote();
