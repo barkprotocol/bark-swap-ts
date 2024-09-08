@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Define custom properties for color and font */
 :root {
   --white: #ffffff;
   --light-gray-50: #f9f9f9;
@@ -42,18 +43,19 @@
   --orange-900: #bf360c;
 }
 
+/* Apply font styles */
 html {
   font-family: var(--font-dm_sans);
 }
 
-h1, h2, h3, h4{
+h1, h2, h3, h4 {
   font-family: var(--font-red-hat-display);
   font-weight: 700;
 }
 
+/* Set background gradient and text color */
 body {
   color: var(--light-gray-900);
-  background: var(--white);
   background: linear-gradient(
     287deg,
     rgba(250, 250, 250, 1) 0%,
@@ -63,12 +65,14 @@ body {
   );
 }
 
+/* Custom utilities */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
+/* Base styles for colors and borders */
 @layer base {
   :root {
     --background: var(--white);
@@ -104,9 +108,7 @@ body {
 
     --radius: 0.8rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -115,6 +117,7 @@ body {
   }
 }
 
+/* Layout and component-specific styles */
 .content {
   display: grid;
   grid-area: content;
@@ -186,16 +189,7 @@ body {
   font-weight: 600;
 }
 
-.spin {
-  &:hover {
-    animation: spin360 1s forwards;
-  }
-}
-
-.spinning {
-  animation: spin360 1s infinite;
-}
-
+/* Animations */
 @keyframes spin360 {
   from {
     transform: rotate(360deg);
@@ -209,4 +203,12 @@ body {
   0%, 80% {
     transform: rotateY(360deg);
   }
+}
+
+.spin:hover {
+  animation: spin360 1s forwards;
+}
+
+.spinning {
+  animation: spin360 1s infinite;
 }

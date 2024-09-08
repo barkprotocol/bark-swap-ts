@@ -2,59 +2,62 @@ import type {
   IUnifiedWalletConfig,
   IWalletNotification,
 } from "@jup-ag/wallet-adapter/dist/types/contexts/WalletConnectionProvider";
-
 import { notifications } from "@mantine/notifications";
 
 const classNames = {
-  icon: "box-content p-1",
+  title: "font-semibold text-lg", // Custom style for title
+  message: "text-sm font-bold text-gray-700", // Custom style for message
 };
 
 const WalletNotification: IUnifiedWalletConfig["notificationCallback"] = {
+
+
   onConnect: (props: IWalletNotification) => {
     notifications.show({
-      title: "Wallet Connected",
-      message: `Connected to wallet ${props.shortAddress}`,
-      color: "green",
-      icon: <span className="material-symbols-rounded">link</span>,
-      classNames,
+      title: "Wallet Connected", // Prettier title with emoji
+      message: `You are successfully connected to ${props.walletName} (${props.shortAddress})!`,
+      color: "#D0BFB4",
+      transition: "fade", // Adds a fade effect
+      autoClose: 3000,    // Closes the notification automatically after 5 seconds
+      classNames, // No icon property here
     });
   },
   onConnecting: () => {
-    notifications.show({
-      title: "Connecting Wallet",
-      message: "Please wait while we connect your wallet...",
-      color: "blue",
-      icon: <span className="material-symbols-rounded">sync</span>,
-      classNames,
-    });
+    return;
   },
+
+
   onDisconnect: (props: IWalletNotification) => {
     notifications.show({
       title: `Disconnected from ${props.walletName}`,
-      message: `Disconnected from wallet ${props.shortAddress}`,
-      color: "orange",
-      icon: <span className="material-symbols-rounded">link_off</span>,
-      classNames,
+      message: `You have been disconnected from wallet ${props.shortAddress}.`,
+      color: "#D0BFB4",
+      transition: "fade", // Adds a fade effect
+      autoClose: 3000,    // Closes the notification automatically after 5 seconds
+      classNames, // No icon property here
     });
   },
+
+
   onNotInstalled: (props: IWalletNotification) => {
     notifications.show({
-      title: `${props.walletName} Wallet is not installed`,
+      title: `${props.walletName} Wallet Not Installed`,
       message: (
         <span>
-          {`Please go to the provider's`}{" "}
+          {`Please visit the `}{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="underline font-bold"
+            className="underline text-black-500 font-semibold hover:text-black-600"
             href={props.metadata.url}
           >
-            {`website`}
+            official website
           </a>{" "}
-          {`to download.`}
+          {`to install the ${props.walletName} wallet.`}
         </span>
       ),
-      classNames,
+      color: "red", // Highlight this error with red color
+      classNames, // No icon property here
     });
   },
 };

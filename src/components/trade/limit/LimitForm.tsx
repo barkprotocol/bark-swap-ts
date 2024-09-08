@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-
 import InverterButton from "../InverterButton";
 import LimitPrice from "./LimitPrice";
 import SelectTime from "./SelectTime";
@@ -14,6 +13,7 @@ import { useSubmitLimitOrder } from "@/hooks/useSubmitLimitOrder";
 import { useSwap } from "../swap/SwapProvider";
 
 export default function LimitForm() {
+  // Destructure swap state and setters
   const {
     sellAmount,
     setSellAmount,
@@ -29,8 +29,8 @@ export default function LimitForm() {
     setExpireTime,
     orderStatus,
   } = useSwap();
-  const invertAmounts = useInvertAmounts();
 
+  const invertAmounts = useInvertAmounts();
   const {
     sellingTokenToBuyingToken,
     sellingTokenToUSD,
@@ -40,37 +40,39 @@ export default function LimitForm() {
 
   const onSubmit = useSubmitLimitOrder();
 
+  // Calculate minimum received amount based on token conversion rate
   const resetToMarket = useCallback(() => {
     if (sellingTokenToBuyingToken) {
-      const calculatedMinAmount = sellingTokenToBuyingToken.toFixed(4);
-
-      setMinReceived(calculatedMinAmount);
+      setMinReceived(sellingTokenToBuyingToken.toFixed(4));
     }
   }, [sellingTokenToBuyingToken, setMinReceived]);
 
+  // Update buy amount when min received or sell amount changes
   useEffect(() => {
     if (minReceived && sellAmount) {
-      const calculatedBuyAmount = (
-        Number(sellAmount) * Number(minReceived)
-      ).toFixed(4);
-
-      setBuyAmount(calculatedBuyAmount);
+      setBuyAmount((Number(sellAmount) * Number(minReceived)).toFixed(4));
     }
-  }, [minReceived, setBuyAmount, sellAmount]);
+  }, [minReceived, sellAmount, setBuyAmount]);
 
+  // Reset minimum received amount when token conversion rate changes
   useEffect(() => {
     if (sellingTokenToBuyingToken) {
       resetToMarket();
     }
   }, [sellingTokenToBuyingToken, resetToMarket]);
 
-  return orderStatus === "PENDING" ? (
-    <TransactionMessage
-      type="pending"
-      icon="progress_activity"
-      mainMessage="Your order is being sent"
-    />
-  ) : (
+  // Render transaction message or form based on order status
+  if (orderStatus === "PENDING") {
+    return (
+      <TransactionMessage
+        type="pending"
+        icon="progress_activity"
+        mainMessage="Your order is being sent"
+      />
+    );
+  }
+
+  return (
     <div className="w-full h-full flex flex-col gap-4">
       <TokenSelector
         label="Sell Amount"
@@ -80,19 +82,11 @@ export default function LimitForm() {
         selectedToken={sellSelectedToken}
         tokenToUSDPrice={sellingTokenToUSD}
       />
-      <LimitPrice
-        inputValue={minReceived}
-        resetToMarket={resetToMarket}
-        setInputValue={setMinReceived}
-      />
-      <SelectTime setExpireTime={setExpireTime} expireTime={expireTime} />
-
       <InverterButton
         onInvert={invertAmounts}
         icon="arrow_downward"
         isLoading={isLoading}
       />
-
       <TokenSelector
         label="Received at least"
         inputValue={buyAmount}
@@ -101,7 +95,12 @@ export default function LimitForm() {
         selectedToken={buySelectedToken}
         tokenToUSDPrice={buyingTokenToUSD}
       />
-
+      <LimitPrice
+        inputValue={minReceived}
+        resetToMarket={resetToMarket}
+        setInputValue={setMinReceived}
+      />
+      <SelectTime setExpireTime={setExpireTime} expireTime={expireTime} />
       <div className="mt-0 md:mt-0">
         <SubmitButton
           onSubmit={onSubmit}

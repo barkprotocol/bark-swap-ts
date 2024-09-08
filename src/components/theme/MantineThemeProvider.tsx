@@ -3,6 +3,7 @@
 import { MantineProvider, createTheme } from "@mantine/core";
 import React from "react";
 
+// Define your custom theme with radius and gradient background
 const theme = createTheme({
   radius: {
     lg: "0.5rem",
@@ -15,6 +16,7 @@ const theme = createTheme({
   },
 });
 
+// Define a custom CSS variables resolver function
 const resolver = (theme: typeof theme) => ({
   variables: {},
   dark: {},

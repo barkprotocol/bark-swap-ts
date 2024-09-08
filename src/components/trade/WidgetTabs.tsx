@@ -9,11 +9,11 @@ export default function WidgetTabs({
 }: WidgetTabsProps) {
   return (
     <div className="w-full mb-6">
-      <div className="flex border-b border-gray-300 bg-gray-50 rounded-t-lg">
+      <div className="flex border-b border-gray-300 bg-gray-50 rounded-t-sm">
         <button
           className={`flex-1 text-base font-semibold py-3 px-4 transition-colors duration-300 ease-in-out rounded-t-lg focus:outline-none ${
             selectedTab === "market"
-              ? "text-black bg-white border-b-2 border-black shadow-md"
+              ? "text-black bg-white border-b-2 border-black shadow-sm"
               : "text-gray-600 hover:text-black hover:bg-gray-100"
           }`}
           role="tab"
@@ -28,7 +28,7 @@ export default function WidgetTabs({
         <button
           className={`flex-1 text-base font-semibold py-3 px-4 transition-colors duration-300 ease-in-out rounded-t-lg focus:outline-none ${
             selectedTab === "limit"
-              ? "text-black bg-white border-b-2 border-black shadow-md"
+              ? "text-black bg-white border-b-2 border-black shadow-sm"
               : "text-gray-600 hover:text-black hover:bg-gray-100"
           }`}
           role="tab"

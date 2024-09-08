@@ -1,7 +1,7 @@
 export default function WarningMev() {
   return (
-    <div className="flex items-center bg-yellow-50 text-yellow-800 border border-yellow-300 rounded-md p-4 text-sm">
-      <span className="material-symbols-rounded text-yellow-800 mr-3">
+    <div className="flex items-center bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-sm p-3 text-sm mb-4">
+      <span className="material-symbols-rounded text-yellow-700 mr-3">
         warning_amber
       </span>
       <p>

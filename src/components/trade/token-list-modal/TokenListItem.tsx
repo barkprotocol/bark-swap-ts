@@ -1,43 +1,40 @@
 import Image from "next/image";
-import { TokenWithBalance } from "@/lib/interfaces/tokensList";
+import React from "react";
 
 interface TokenListItemProps {
-  item: TokenWithBalance;
+  item: {
+    balance?: number; // Make balance optional or ensure it is a number
+    symbol: string;
+    logoURI?: string;
+    // Add other properties as needed
+  };
   onClick: () => void;
 }
 
 export default function TokenListItem({ item, onClick }: TokenListItemProps) {
-  const balance = item.balance != null ? item.balance.toFixed(2) : 'N/A';
+  // Safely handle balance to avoid errors
+  const balance = typeof item.balance === 'number'
+    ? item.balance.toFixed(2)
+    : 'N/A';
 
   return (
     <button
-      className="w-full block hover:bg-gray-100 transition-colors duration-200 px-4 py-3 my-2 rounded-lg flex items-center"
       onClick={onClick}
-      aria-label={`Select ${item.symbol} token`}
+      className="flex items-center justify-between p-3 bg-white hover:bg-gray-100 text-black rounded-lg shadow-md transition-all"
+      aria-label={`Select ${item.symbol} with balance ${balance}`}
+      role="listitem"
     >
-      <div className="flex items-center w-full">
-        <div className="flex-shrink-0 mr-3">
-          <Image
-            className="rounded-full"
-            width={35}
-            height={35}
-            src={item.logoURI || "https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"}
-            alt={`Logo of ${item.name}`}
-            layout="intrinsic"
-          />
-        </div>
-        <div className="flex flex-col flex-grow text-left">
-          <span className="font-medium text-lg">{item.symbol}</span>
-          <span className="text-sm text-gray-600">{item.name}</span>
-        </div>
-        {item.balance != null && (
-          <div className="text-right flex-shrink-0">
-            <span className="text-sm text-gray-600">
-              {balance}
-            </span>
-          </div>
-        )}
+      <div className="flex items-center">
+        <Image
+          src={item.logoURI || "https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"} // Default image if logoURI is not provided
+          alt={`Logo of ${item.symbol}`}
+          className="w-10 h-10 rounded-full mr-3"
+          width={40} // Width for Image component
+          height={40} // Height for Image component
+        />
+        <span className="font-semibold">{item.symbol}</span>
       </div>
+      <span className="text-gray-600">{balance}</span>
     </button>
   );
 }

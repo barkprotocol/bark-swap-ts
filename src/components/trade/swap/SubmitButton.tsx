@@ -32,15 +32,16 @@ export default function SubmitButton({
     if (!connected) {
       return (
         <UnifiedWalletButton
-          buttonClassName="w-full rounded-xl px-4 py-3 text-lg h-auto bg-cyan text-black shadow-md wallet-connect-button"
-          currentUserClassName="w-full rounded-xl px-4 py-3 text-lg font-bold h-auto bg-black text-black shadow-md wallet-connect-button"
+          buttonClassName="w-full rounded-sm px-4 py-3 text-lg h-auto bg-black-500 text-white shadow-md wallet-connect-button"
+          currentUserClassName="w-full rounded-sm px-4 py-3 text-lg font-bold h-auto bg-black text-white shadow-md wallet-connect-button"
+          aria-label="Connect wallet"
         />
       );
     }
 
     if (!isValidAmount) {
       return (
-        <Button variant="secondary" className="w-full" disabled>
+        <Button variant="secondary" className="w-full" disabled aria-label="Enter a valid amount">
           Enter a valid amount
         </Button>
       );
@@ -48,7 +49,7 @@ export default function SubmitButton({
 
     if (insufficientBalance) {
       return (
-        <Button variant="secondary" className="w-full" disabled>
+        <Button variant="secondary" className="w-full" disabled aria-label="Insufficient balance">
           Insufficient Balance
         </Button>
       );
@@ -60,6 +61,7 @@ export default function SubmitButton({
         className="w-full"
         onClick={onSubmit}
         disabled={isLoading}
+        aria-label={isLoading ? "Submitting order" : "Submit order"}
       >
         {isLoading ? 'Submitting...' : 'Submit Order'}
       </Button>

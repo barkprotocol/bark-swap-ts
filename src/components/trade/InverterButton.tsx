@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useCallback } from "react";
 
 interface InverterButtonProps {
   onInvert: () => void;
@@ -11,26 +12,35 @@ export default function InverterButton({
   icon = "swap_vert",
   isLoading = false,
 }: InverterButtonProps) {
+  // Memoize the onInvert callback to avoid unnecessary re-renders
+  const handleClick = useCallback(() => {
+    if (!isLoading) {
+      onInvert();
+    }
+  }, [onInvert, isLoading]);
+
   return (
-    <div className="text-center -my-6 text-xs flex justify-center items-center">
+    <div className="flex justify-center items-center mb-4"> {/* Added mb-4 for spacing */}
       <button
-        className="shadow-lg rounded-xl text-3xl text-gray-800 border-2 border-gray-800 bg-white hover:text-white hover:bg-gray-800 hover:border-white transition-all h-12 w-12 flex items-center justify-center z-10"
-        onClick={onInvert}
-        disabled={isLoading}
-        aria-label={isLoading ? "Loading..." : "Invert Amounts"}
+        className={`relative flex items-center justify-center h-14 w-14 rounded-full border border-gray-800 bg-white text-gray-800 hover:bg-gray-900 hover:text-white transition-colors duration-300 ease-in-out shadow-md ${
+          isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+        }`}
+        onClick={handleClick}
+        disabled={isLoading} // Button is disabled when loading
+        aria-label={isLoading ? "Loading, please wait..." : "Invert Amounts"}
       >
         {isLoading ? (
-          <Image
-            className="block spinning"
-            width={35}
-            height={35}
-            src="https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"
-            alt="Loading..."
-          />
+          <div className="absolute flex items-center justify-center w-full h-full">
+            <Image
+              className="animate-spin"
+              width={40}
+              height={40}
+              src="https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"
+              alt="Loading..."
+            />
+          </div>
         ) : (
-          <span className="material-symbols-rounded text-3xl block p-2">
-            {icon}
-          </span>
+          <span className="material-symbols-rounded text-3xl">{icon}</span>
         )}
       </button>
     </div>

@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 };
 
 const notificationClasses = {
-  notification: "bg-black",
+  notification: "bg-black text-white", // Ensure text is visible on dark background
 };
 
 export default function RootLayout({
@@ -40,7 +40,6 @@ export default function RootLayout({
     <html lang="en" className={dm_sans.variable}>
       <head>
         <ColorSchemeScript />
-        <GoogleAnalytics gaId="YOUR_GOOGLE_ANALYTICS_ID" /> {/* Replace with your Google Analytics ID */}
       </head>
       <body className={red_hat_display.variable}>
         <MantineThemeProvider>
@@ -51,6 +50,7 @@ export default function RootLayout({
           />
           <AppWalletProvider>{children}</AppWalletProvider>
         </MantineThemeProvider>
+        <GoogleAnalytics gaId="YOUR_GA_ID_HERE" /> {/* Replace with actual GA ID */}
       </body>
     </html>
   );

@@ -26,12 +26,22 @@ export default function FAQ() {
               content: "mt-2 text-gray-600 dark:text-gray-400",
             }}
           >
-            {faqs.map((faq, index) => (
-              <Accordion.Item key={index} value={`faq-${index}`}>
-                <Accordion.Control>{faq.question}</Accordion.Control>
-                <Accordion.Panel>{faq.answer}</Accordion.Panel>
-              </Accordion.Item>
-            ))}
+            {faqs && faqs.length > 0 ? (
+              faqs.map((faq, index) => (
+                <Accordion.Item key={index} value={`faq-${index}`}>
+                  <Accordion.Control>
+                    {faq.question}
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    {faq.answer}
+                  </Accordion.Panel>
+                </Accordion.Item>
+              ))
+            ) : (
+              <p className="text-center text-gray-600 dark:text-gray-400">
+                No FAQs available at the moment.
+              </p>
+            )}
           </Accordion>
         </div>
       </main>

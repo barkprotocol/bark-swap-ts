@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+
 import AdditionalInfo from "./AdditionalInfo";
 import SubmitButton from "./SubmitButton";
 import TradeSelectors from "./TradeSelectors";
@@ -38,43 +39,43 @@ export default function SwapTradeForm() {
   );
 
   useEffect(() => {
-    if (outputAmount !== undefined) {
+    if (outputAmount) {
       setBuyAmount(outputAmount);
     }
   }, [outputAmount, setBuyAmount]);
 
   const onSubmit = useCallback(async () => {
     if (!wallet.connected || !wallet.signTransaction) {
-      const errorMsg = "Wallet is not connected or does not support signing transactions";
-      console.error(errorMsg);
-      setErrorMessage(errorMsg);
-      setOrderStatus("ERROR");
+      console.error(
+        "Wallet is not connected or does not support signing transactions",
+      );
       return;
     }
 
-    try {
-      const response = await fetch("https://quote-api.jup.ag/v6/swap", {
+    const { swapTransaction } = await (
+      await fetch("https://quote-api.jup.ag/v6/swap", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           quoteResponse: quote,
           userPublicKey: wallet.publicKey?.toString(),
           wrapAndUnwrapSol: true,
+          // feeAccount is optional. Use if you want to charge a fee.  feeBps must have been passed in /quote API.
+          // feeAccount: "fee_account_public_key"
         }),
-      });
+      })
+    ).json();
 
-      if (!response.ok) {
-        throw new Error(`Error fetching swap transaction: ${response.statusText}`);
-      }
+    setOrderStatus("PENDING");
 
-      const { swapTransaction } = await response.json();
-      setOrderStatus("PENDING");
-
+    try {
       const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
       const signedTransaction = await wallet.signTransaction(transaction);
-      const rawTransaction = signedTransaction.serialize();
 
+      const rawTransaction = signedTransaction.serialize();
       const txid = await connection.sendRawTransaction(rawTransaction, {
         skipPreflight: true,
         maxRetries: 2,
@@ -84,40 +85,49 @@ export default function SwapTradeForm() {
 
       const latestBlockHash = await connection.getLatestBlockhash();
 
-      await connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-        signature: txid,
-      }, "confirmed");
-
-      setOrderStatus("SUBMITTED");
+      await connection.confirmTransaction(
+        {
+          blockhash: latestBlockHash.blockhash,
+          lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+          signature: txid,
+        },
+        "confirmed",
+      );
+      setOrderStatus("SUBMITED");
     } catch (error) {
-      const errorMsg = (error as Error).message || "Error signing or sending the transaction";
-      console.error(errorMsg);
-      setErrorMessage(errorMsg);
+      const { message } = error as { message: string };
+      console.error("Error signing or sending the transaction:", error);
+      setErrorMessage(message ?? "");
       setOrderStatus("ERROR");
     }
-  }, [wallet, connection, quote, setOrderStatus, setSolscanUrl, setErrorMessage]);
+  }, [
+    wallet,
+    connection,
+    quote,
+    setOrderStatus,
+    setSolscanUrl,
+    setErrorMessage,
+  ]);
 
-  if (orderStatus === "ERROR") {
-    return (
-      <TransactionMessage
-        type="error"
-        icon="report"
-        mainMessage={setErrorMessage || "Error trying to get quote."}
-        buttonText="Dismiss"
-        buttonAction={() => setOrderStatus("INCOMPLETE")}
-        aria-live="assertive"
-      />
-    );
-  }
-
+  // if (error && orderStatus === "ERROR") {
+  //   return (
+  //     <TransactionMessage
+  //       type="error"
+  //       icon="report"
+  //       mainMessage={error ?? "Error trying to get quote."}
+  //       buttonText="Dismiss"
+  //       buttonAction={() => {
+  //         resetAll();
+  //         setOrderStatus("INCOMPLETE");
+  //       }}
+  //     />
+  //   );
+  // }
   return orderStatus === "PENDING" ? (
     <TransactionMessage
       type="pending"
       icon="progress_activity"
       mainMessage="Your order is being sent"
-      aria-live="polite"
     />
   ) : (
     <div className="w-full h-full flex flex-col">

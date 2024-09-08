@@ -9,7 +9,7 @@ import WalletConnectionButton from "../wallet-connect/WalletConnectionButton";
 const customTheme: CustomFlowbiteTheme = {
   navbar: {
     root: {
-      base: "sticky top-0 flex z-50 justify-center w-full p-5 bg-sand-100",
+      base: "sticky top-0 flex z-50 justify-center w-full text-sm p-5 bg-transparent", // Set background to transparent
       rounded: {
         on: "rounded",
         off: "",
@@ -27,21 +27,21 @@ const customTheme: CustomFlowbiteTheme = {
       },
     },
     brand: {
-      base: "flex items-center",
+      base: "flex items-center ml-8", // Add margin-left for spacing
     },
     collapse: {
-      base: "w-full md:block md:w-auto",
-      list: "mt-4 flex flex-col md:items-center md:mt-0 md:flex-row md:space-x-10 md:text-sm md:font-medium",
+      base: "w-full md:block md:w-auto grow md:ml-4",
+      list: "mt-4 flex flex-col md:items-center md:mt-0 md:flex-row md:space-x-10 md:text-xs md:font-medium",
       hidden: {
         on: "hidden",
         off: "",
       },
     },
     link: {
-      base: "block py-2 pl-3 pr-4 md:p-0 text-xl",
+      base: "block py-2 pl-3 pr-4 md:p-0 text-sm",
       active: {
-        on: "bg-sand-200 text-black md:bg-transparent md:text-sand-500",
-        off: "border-b border-gray-100 text-gray-700 hover:bg-sand-50 md:border-0 md:hover:bg-transparent md:hover:text-sand-500",
+        on: "bg-transparent text-cream md:text-cyan-dark", // Set background to transparent
+        off: "border-b border-gray-100 text-gray-700 hover:bg-gray-50 md:border-0 md:hover:bg-transparent md:hover:text-black-700",
       },
       disabled: {
         on: "text-gray-400 hover:cursor-not-allowed",
@@ -49,8 +49,8 @@ const customTheme: CustomFlowbiteTheme = {
       },
     },
     toggle: {
-      base: "inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-sand-50 focus:outline-none focus:ring-2 focus:ring-sand-200 md:hidden",
-      icon: "h-6 w-6",
+      base: "inline-flex items-center rounded-lg p-2 text-xs text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden",
+      icon: "h-5 w-5 shrink-0",
     },
   },
   dropdown: {
@@ -64,19 +64,19 @@ const customTheme: CustomFlowbiteTheme = {
         },
         placement: "-4px",
       },
-      base: "z-10 min-w-52 divide-y divide-gray-100 rounded shadow",
-      content: "py-1 text-sm text-black",
+      base: "z-10 min-w-52 divide-y divide-gray-100 rounded shadow focus:outline-none",
+      content: "py-1 text-xs text-black",
       divider: "my-1 h-px bg-gray-100",
-      header: "block px-4 py-2 text-sm text-black",
+      header: "block px-4 py-2 text-xs text-black",
       hidden: "invisible opacity-0",
       item: {
         container: "",
-        base: "flex min-w-52 cursor-pointer items-center justify-start px-4 py-2 text-sm text-black hover:bg-gray-100",
+        base: "flex min-w-52 cursor-pointer items-center justify-start px-4 py-2 text-xs text-black hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
         icon: "mr-2 h-4 w-4",
       },
       style: {
-        light: "border border-gray-200 bg-white text-black",
-        auto: "border border-gray-200 bg-white text-black",
+        light: "border border-gray-200 bg-cream text-black", // Remove purple and use black text
+        auto: "border border-gray-200 bg-cream text-black",
       },
       target: "w-fit",
     },
@@ -89,23 +89,32 @@ export default function Header() {
     <header>
       <Flowbite theme={{ theme: customTheme }}>
         <Navbar fluid>
-          <Navbar.Brand as={Link} href="https://barkprotocol.net/">
-            <div className="flex items-center">
+          <Navbar.Brand as={Link} href="https://trade.barkprotocol.net/">
+            <div className="relative flex items-center ml-8"> {/* Add margin-left for spacing */}
               <Image
-                className="mr-4"
-                src="https://ucarecdn.com/dd264726-4f83-4a3a-b36b-bad0fb3f58a5/logolight.png"
+                src="https://ucarecdn.com/d63c1594-27cb-4b9e-afd1-8e5a9c790db9/logodark.svg"
                 alt="BARK Logo"
-                width={40}
-                height={40}
+                width={140} // Increase width for more space
+                height={60} // Increase height for more space
                 priority
               />
             </div>
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse>
-            <div className="relative text-black font-bold text-2xl py-2 pl-3 pr-4 md:p-0">
+            <div className="relative group text-black font-bold text-ml py-2 pl-3 pr-4 md:p-0"> {/* Smaller font size */}
+              <Navbar.Link as={Link} href="https://swap.barkprotocol.net/">
+                <div className="relative flex items-center">
+                  <span></span>
+                  <Underscore />
+                </div>
+              </Navbar.Link>
+              <Underscore />
+            </div>
+
+            <div className="relative group text-black font-bold text-ml py-2 pl-3 pr-4 md:p-0"> {/* Smaller font size */}
               <Navbar.Link as={Link} href="/dashboard">
-                <div className="relative">
+                <div className="relative flex items-center">
                   <span>Dashboard</span>
                   <Underscore />
                 </div>
@@ -113,19 +122,9 @@ export default function Header() {
               <Underscore />
             </div>
 
-            <div className="relative text-sand-500 font-bold text-2xl py-2 pl-3 pr-4 md:p-0">
-              <Navbar.Link as={Link} href="https://swap.barkprotocol.net/">
-                <div className="relative">
-                  <span>Swap</span>
-                  <Underscore />
-                </div>
-              </Navbar.Link>
-              <Underscore />
-            </div>
-
-            <div className="relative text-black font-bold text-2xl py-2 pl-3 pr-4 md:p-0">
-              <Navbar.Link as={Link} href="/faq">
-                <div className="relative">
+            <div className="relative group text-black font-bold text-ml py-2 pl-3 pr-4 md:p-0"> {/* Smaller font size */}
+              <Navbar.Link as={Link} href="/FAQ">
+                <div className="relative flex items-center">
                   <span>FAQ</span>
                   <Underscore />
                 </div>
@@ -133,9 +132,9 @@ export default function Header() {
               <Underscore />
             </div>
 
-            <div className="flex-grow"></div>
+            <div className="grow"></div>
 
-            <WalletConnectionButton />
+            <WalletConnectionButton className="mr-8 text-xs" /> {/* Smaller button size and margin-right for spacing */}
           </Navbar.Collapse>
         </Navbar>
       </Flowbite>

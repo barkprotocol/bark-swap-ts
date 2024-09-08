@@ -2,7 +2,7 @@ import { Modal, TextInput } from "@mantine/core";
 import { Token } from "@/lib/interfaces/tokensList";
 import TokenListItem from "./TokenListItem";
 import { useFilteredTokens } from "@/hooks/useFilteredTokens";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 interface TokenListModalProps {
   opened: boolean;
@@ -18,11 +18,20 @@ export default function TokenListModal({
   const [inputText, setInputText] = useState("");
   const filteredTokensList = useFilteredTokens(inputText);
 
+  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(event.currentTarget.value);
+  }, []);
+
+  const handleTokenSelect = useCallback((token: Token) => {
+    setSelectedToken(token);
+    close();
+  }, [setSelectedToken, close]);
+
   return (
     <Modal
       opened={opened}
       onClose={() => {
-        setInputText("");
+        setInputText(""); // Clear search input when modal closes
         close();
       }}
       title="Select a token"
@@ -31,7 +40,7 @@ export default function TokenListModal({
       classNames={{
         content: "bg-white",
         header: "bg-white sticky",
-        title: "font-bold text-black", // Changed from text-purple to text-black
+        title: "font-bold text-black",
       }}
     >
       <TextInput
@@ -39,23 +48,20 @@ export default function TokenListModal({
         size="lg"
         placeholder="Search name or paste address"
         value={inputText}
-        onChange={(event) => setInputText(event.currentTarget.value)}
+        onChange={handleSearchChange}
         aria-label="Search tokens"
         classNames={{
           input: "bg-cream-light focus:ring-0 focus:border-0",
         }}
       />
 
-      <div className="-mx-4 mt-4">
+      <div className="mt-4">
         {filteredTokensList.length > 0 ? (
           filteredTokensList.map((item) => (
             <TokenListItem
               key={item.address}
               item={item}
-              onClick={() => {
-                setSelectedToken(item);
-                close();
-              }}
+              onClick={() => handleTokenSelect(item)}
             />
           ))
         ) : (

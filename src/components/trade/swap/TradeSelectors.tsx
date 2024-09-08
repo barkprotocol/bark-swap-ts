@@ -25,27 +25,40 @@ export default function TradeSelectors({
     setBuySelectedToken,
   } = useSwap();
 
-  const invertAmounts = useInvertAmounts();
+  const invertAmounts = useInvertAmounts({
+    sellAmount,
+    setSellAmount,
+    buyAmount,
+    setBuyAmount,
+    sellSelectedToken,
+    setSellSelectedToken,
+    buySelectedToken,
+    setBuySelectedToken,
+  });
 
   return (
-    <div className="w-full flex flex-col space-y-4">
-      <TokenSelector
-        label="Sell Amount"
-        inputValue={sellAmount}
-        setInputValue={setSellAmount}
-        setSelectedToken={setSellSelectedToken}
-        selectedToken={sellSelectedToken}
-        tokenToUSDPrice={sellingTokenToUSD}
-      />
+    <>
+      <div className="my-4">
+        <TokenSelector
+          label="Sell Amount"
+          inputValue={sellAmount}
+          setInputValue={setSellAmount}
+          setSelectedToken={setSellSelectedToken}
+          selectedToken={sellSelectedToken}
+          tokenToUSDPrice={sellingTokenToUSD}
+        />
+      </div>
       <InverterButton onInvert={invertAmounts} isLoading={isLoading} />
-      <TokenSelector
-        label="Buy Amount"
-        inputValue={buyAmount}
-        setInputValue={setBuyAmount}
-        setSelectedToken={setBuySelectedToken}
-        selectedToken={buySelectedToken}
-        tokenToUSDPrice={buyingTokenToUSD}
-      />
-    </div>
+      <div className="my-4">
+        <TokenSelector
+          label="Buy Amount"
+          inputValue={buyAmount}
+          setInputValue={setBuyAmount}
+          setSelectedToken={setBuySelectedToken}
+          selectedToken={buySelectedToken}
+          tokenToUSDPrice={buyingTokenToUSD}
+        />
+      </div>
+    </>
   );
 }
