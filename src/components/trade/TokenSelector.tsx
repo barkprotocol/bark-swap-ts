@@ -23,27 +23,24 @@ export default function TokenSelector({
 }: TokenSelectorProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
+  // Calculate USD value based on token price
   const convertedToUSD =
-    tokenToUSDPrice &&
-    inputValue &&
-    (Number(inputValue) * tokenToUSDPrice).toFixed(2);
+    tokenToUSDPrice && inputValue !== '' && (Number(inputValue) * tokenToUSDPrice).toFixed(2);
 
   return (
     <>
       <div className="relative rounded-xl border border-gray-300 bg-white hover:border-gray-500 transition-all">
         <NumberInput
           label={label}
-          aria-label="Enter Amount"
+          aria-label={`Enter amount of ${selectedToken?.symbol || 'token'}`}
           variant="unstyled"
           clampBehavior="strict"
           allowNegative={false}
-          leftSection={
-            <TokenSelectorButton onClick={open} token={selectedToken} />
-          }
+          leftSection={<TokenSelectorButton onClick={open} token={selectedToken} />}
           hideControls
           size="xl"
           value={inputValue}
-          onChange={setInputValue}
+          onChange={(value) => setInputValue(value)}
           placeholder="0.00"
           classNames={{
             label: "ml-4 mt-4 text-sm font-semibold text-gray-700",

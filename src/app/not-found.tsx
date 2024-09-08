@@ -19,7 +19,7 @@ export default function NotFound() {
         <p className="text-lg mb-6">
           It looks like the page you're looking for doesn't exist.
         </p>
-        <Link href="/" className="text-black-600 underline hover:text-blue-800 dark:text-black-400 dark:hover:text-black-300">
+        <Link href="/" className="text-black underline hover:text- dark:text-black-400 dark:hover:text-black-300">
           Go back to the homepage
         </Link>
       </main>

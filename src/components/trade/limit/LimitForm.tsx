@@ -61,7 +61,7 @@ export default function LimitForm() {
     }
   }, [sellingTokenToBuyingToken, resetToMarket]);
 
-  // Render transaction message or form based on order status
+  // Handle order status
   if (orderStatus === "PENDING") {
     return (
       <TransactionMessage
@@ -101,7 +101,7 @@ export default function LimitForm() {
         setInputValue={setMinReceived}
       />
       <SelectTime setExpireTime={setExpireTime} expireTime={expireTime} />
-      <div className="mt-0 md:mt-0">
+      <div className="mt-4 md:mt-8"> {/* Added a top margin for better spacing */}
         <SubmitButton
           onSubmit={onSubmit}
           sellAmount={sellAmount}

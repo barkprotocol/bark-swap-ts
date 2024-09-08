@@ -27,7 +27,7 @@ export default function InverterButton({
         }`}
         onClick={handleClick}
         disabled={isLoading} // Button is disabled when loading
-        aria-label={isLoading ? "Loading, please wait..." : "Invert Amounts"}
+        aria-label={isLoading ? "Loading, please wait..." : "Invert amounts"}
       >
         {isLoading ? (
           <div className="absolute flex items-center justify-center w-full h-full">
@@ -36,7 +36,7 @@ export default function InverterButton({
               width={40}
               height={40}
               src="https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"
-              alt="Loading..."
+              alt="Loading indicator"
             />
           </div>
         ) : (

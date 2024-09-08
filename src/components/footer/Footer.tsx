@@ -2,7 +2,7 @@ import { FaTwitter, FaTelegramPlane, FaMediumM } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-8 lg:py-12">
+    <footer className="bg-transparent text-white py-8 lg:py-12">
       <div className="mx-auto w-full max-w-screen-lg px-4">
         {/* Footer Links */}
         <div className="grid grid-cols-2 gap-8 sm:gap-12 md:grid-cols-4 mb-6">
@@ -57,7 +57,7 @@ export default function Footer() {
           <div className="flex justify-center space-x-6">
             <a
               href="https://twitter.com/barkprotocol"
-              className="text-white hover:text-blue-400 text-3xl"
+              className="text-white hover:text-black-400 text-3xl"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow us on Twitter"
@@ -66,7 +66,7 @@ export default function Footer() {
             </a>
             <a
               href="https://t.me/barkprotocol"
-              className="text-white hover:text-blue-400 text-3xl"
+              className="text-white hover:text-black-400 text-3xl"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow us on Telegram"
@@ -75,7 +75,7 @@ export default function Footer() {
             </a>
             <a
               href="https://medium.com/@barkprotocol"
-              className="text-white hover:text-gray-300 text-3xl"
+              className="text-white hover:text-black-400 text-3xl"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow us on Medium"
@@ -90,7 +90,7 @@ export default function Footer() {
           <span>&copy; {new Date().getFullYear()} BARK Protocol. All rights reserved.</span>
           <a
             href="https://trade.barkprotocol.net/terms/conditions"
-            className="text-gray-400 hover:text-gray-300 ml-4"
+            className="text-gray-400 hover:text-gray-600 ml-4"
             target="_blank"
             rel="noopener noreferrer"
           >
