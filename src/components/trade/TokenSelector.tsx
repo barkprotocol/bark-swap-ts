@@ -26,11 +26,11 @@ export default function TokenSelector({
   const convertedToUSD =
     tokenToUSDPrice &&
     inputValue &&
-    (Number(inputValue || 0) * tokenToUSDPrice).toFixed(2);
+    (Number(inputValue) * tokenToUSDPrice).toFixed(2);
 
   return (
     <>
-      <div className="rounded-2xl border-2 border-gray-300 hover:border-gray-500 bg-white">
+      <div className="relative rounded-xl border border-gray-300 bg-white hover:border-gray-500 transition-all">
         <NumberInput
           label={label}
           aria-label="Enter Amount"
@@ -47,13 +47,12 @@ export default function TokenSelector({
           placeholder="0.00"
           classNames={{
             label: "ml-4 mt-4 text-sm font-semibold text-gray-700",
-            section: "ml-2 w-auto -mt-24 sm:-mt-0",
-            input:
-              "text-right text-black pr-3 rounded-2xl text-xl border-0 focus:ring-0 focus:border-0 bg-transparent mt-12 sm:mt-0",
+            section: "ml-2 w-auto -mt-2",
+            input: "text-right text-black pr-3 rounded-xl text-xl border-0 bg-transparent",
           }}
         />
         {convertedToUSD && (
-          <div className="text-xs text-gray-600 text-right mr-3 mb-3">
+          <div className="absolute bottom-3 right-3 text-xs text-gray-600">
             ≈ $ {convertedToUSD}
           </div>
         )}

@@ -2,22 +2,20 @@ import Image from "next/image";
 
 export default function WidgetTitle() {
   return (
-    <div className="relative flex items-center">
-      <div className="text-black font-bold flex items-center text-3xl mb-2 md:mb-4 select-none">
-        BARK
-        <Image
-          src="/assets/logos/bark/bark_logo_tiny.png"
-          alt="BARK logo with a spinning effect" // Improved alt text for accessibility
-          className="w-12 h-12 mx-4 spin" // Ensure 'spin' class is defined in your CSS
-          width={48}
-          height={48}
-        />
-        Swap
+    <div className="flex flex-col items-center text-center">
+      <Image
+        src="https://ucarecdn.com/b065ba1f-6279-4677-ae8f-0ebc1facb68d/bark_icon.png"
+        alt="BARK logo" // Simplified alt text for clarity
+        className="w-14 h-14 mb-4 spin" // Consistent size and margin for spacing
+        width={56} // Slightly smaller size for a refined look
+        height={56} // Slightly smaller size for a refined look
+      />
+      <div className="text-4xl font-bold mb-1">BARK</div> {/* Main title with margin */}
+      <div className="text-2xl font-semibold mb-1 text-gray-700">
+        {/* Subtitle if needed */}
       </div>
-      <div className="absolute -top-6 right-1/3 md:top-0 md:right-0">
-        <span className="ml-2 p-2 bg-black text-white text-xs rounded-xl font-semibold shadow-md">
-          v1 (alpha)
-        </span>
+      <div className="text-base text-sand-400 mb-4">
+        Seamlessly trade and mint SPL tokens with ease.
       </div>
     </div>
   );

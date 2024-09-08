@@ -8,32 +8,38 @@ export default function WidgetTabs({
   setSelectedTab,
 }: WidgetTabsProps) {
   return (
-    <div className="flex w-full font-bold text-xl mb-4">
-      <div className="flex w-full border-b border-gray-300">
-        <div
-          className={`cursor-pointer text-base flex items-center px-4 py-2 ${
+    <div className="w-full mb-6">
+      <div className="flex border-b border-gray-300 bg-gray-50 rounded-t-lg">
+        <button
+          className={`flex-1 text-base font-semibold py-3 px-4 transition-colors duration-300 ease-in-out rounded-t-lg focus:outline-none ${
             selectedTab === "market"
-              ? "text-black-medium border-b-2 border-gray-medium"
-              : "text-gray-600"
+              ? "text-black bg-white border-b-2 border-black shadow-md"
+              : "text-gray-600 hover:text-black hover:bg-gray-100"
           }`}
           role="tab"
           aria-selected={selectedTab === "market"}
+          aria-controls="market-content"
+          id="market-tab"
           onClick={() => setSelectedTab("market")}
+          aria-label="Market Order tab"
         >
           Market Order
-        </div>
-        <div
-          className={`cursor-pointer text-base flex items-center px-4 py-2 ${
+        </button>
+        <button
+          className={`flex-1 text-base font-semibold py-3 px-4 transition-colors duration-300 ease-in-out rounded-t-lg focus:outline-none ${
             selectedTab === "limit"
-              ? "text-black-medium border-b-2 border-gray-medium"
-              : "text-gray-600"
+              ? "text-black bg-white border-b-2 border-black shadow-md"
+              : "text-gray-600 hover:text-black hover:bg-gray-100"
           }`}
           role="tab"
           aria-selected={selectedTab === "limit"}
+          aria-controls="limit-content"
+          id="limit-tab"
           onClick={() => setSelectedTab("limit")}
+          aria-label="Limit Order tab"
         >
           Limit Order
-        </div>
+        </button>
       </div>
     </div>
   );

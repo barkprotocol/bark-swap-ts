@@ -40,6 +40,7 @@ export default function RootLayout({
     <html lang="en" className={dm_sans.variable}>
       <head>
         <ColorSchemeScript />
+        <GoogleAnalytics gaId="YOUR_GOOGLE_ANALYTICS_ID" /> {/* Replace with your Google Analytics ID */}
       </head>
       <body className={red_hat_display.variable}>
         <MantineThemeProvider>
@@ -50,7 +51,6 @@ export default function RootLayout({
           />
           <AppWalletProvider>{children}</AppWalletProvider>
         </MantineThemeProvider>
-        <GoogleAnalytics gaId="" /> 
       </body>
     </html>
   );
